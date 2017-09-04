@@ -1,0 +1,35 @@
+<div class="well">
+	<div class="container row">
+		<div class="col-md-3">
+			<h1>User: <%= @user.username%></h1>
+		</div>
+		<div class="col-md-6">
+			<h2>Posts: <%=@user.stories.size%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			Post Likes: <%=@user.likes_received.size%></h2>
+			<h2>Comments: <%=@user.comments.size%> &nbsp;
+			Post Dislikes: <%=@user.dislikes_received.size%></h2>
+		</div>
+	</div>
+	<%= image_tag @user.avatar.url %>
+
+	<% if current_user.id == @user.id %>
+	<%=link_to("Edit your profile", edit_user_registration_path)%>
+	<%end%>
+</div>
+
+<h2>Comments by this user</h2>
+
+<% @user.comments.each do |comment| %>
+
+<hr>
+<%= comment.body %> 
+<small> - Submitted <%= time_ago_in_words(comment.created_at) %> ago to 
+	<b><%= Story.find(comment.story_id).title%></b></small>
+
+	<p>
+		<%=link_to("Original Thread", story_path(comment.story_id))%>
+	</p>
+	<hr>
+
+
+	<% end %>

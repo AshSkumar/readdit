@@ -1,0 +1,59 @@
+
+<% Story.find_each do |story| %>
+
+<div class="row">
+
+	<div class="col-md-1">
+
+		<div align="center">
+
+			<% if @user.liked?(story) == 1 %>
+			<h2 class="liked">
+				<%= link_to fa_icon("thumbs-o-up"), unlike_path(story_id: story.id), method: :delete %>
+			</h2>
+			<%else%>
+			<h2 class="neutral">
+				<%= link_to fa_icon("thumbs-o-up"), like_path(story_id: story.id), method: :post %>
+			</h2>
+			<%end%>
+
+			<h2 class="score"><%= story.likes.size - story.dislikes.size%></h2>
+
+			<% if @user.liked?(story) == -1 %>
+			<h2 class = "disliked">
+				<%= link_to fa_icon("thumbs-o-down"), undislike_path(story_id: story.id), method: :delete %>
+			</h2>
+			<%else%>
+			<h2 class="neutral">
+				<%= link_to fa_icon("thumbs-o-down"), dislike_path(story_id: story.id), method: :post %>
+			</h2>
+			<%end%>
+		</div>
+	</div>
+	<div class="well story">
+		<div class="col-md-2">
+			<div class="row container">
+				<%= link_to image_tag("http://www.google.com/s2/favicons?domain_url=#{story.url}", alt: "Edit Entry"), story.url%>
+			</div>
+			<div class="row ">
+				<h6>
+					Created <%= time_ago_in_words(story.created_at) %> Ago
+					<h6>
+					</div>
+				</div>
+				<div class = "col-md-9">
+					<div class="title">
+						<h3 style="color:blue; padding: 0px;">
+							<%= link_to story.title, story_path(story.id), method: :get %>
+						</h3>
+					</div>
+					<div class="body">
+						<p>
+							<%= simple_format(story.body) %>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<%end%>

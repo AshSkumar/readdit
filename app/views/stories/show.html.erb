@@ -1,0 +1,79 @@
+<div class="row">
+	<div class="col-md-1">
+
+		<div align="center">
+
+			<% if @user.liked?(@story) == 1 %>
+			<h2 class="liked">
+				<%= link_to fa_icon("thumbs-o-up"), unlike_path(story_id: @story.id), method: :delete %>
+			</h2>
+			<%else%>
+			<h2 class="neutral">
+				<%= link_to fa_icon("thumbs-o-up"), like_path(story_id: @story.id), method: :post %>
+			</h2>
+			<%end%>
+
+			<h2 class="score"><%= @story.likes.size - @story.dislikes.size%></h2>
+
+			<% if @user.liked?(@story) == -1 %>
+			<h2 class = "disliked">
+				<%= link_to fa_icon("thumbs-o-down"), undislike_path(story_id: @story.id), method: :delete %>
+			</h2>
+			<%else%>
+			<h2 class="neutral">
+				<%= link_to fa_icon("thumbs-o-down"), dislike_path(story_id: @story.id), method: :post %>
+			</h2>
+			<%end%>
+			<div class="like-numbers">
+				<span class="left"><%=@story.likes.size%></span>
+				<span class="right"><%=@story.dislikes.size%></span>
+			</div>
+			<div class="like-bar">
+				<div class="bar-red">
+					<div class="bar-green" 
+					style="width:<%=Float(@story.likes.size)*100/(@story.dislikes.size + @story.likes.size)%>%"></div>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="well story">
+		<div class="col-md-2">
+			<div class="row container">
+				<%= link_to image_tag("http://www.google.com/s2/favicons?domain_url=#{@story.url}", alt: "Edit Entry"), @story.url%>
+			</div>
+			<div class="row ">
+				<h6>
+					Created <%= time_ago_in_words(@story.created_at) %> Ago by 
+					<%= link_to @story.user.username, user_profile_path(@story.user.id)%>
+				</h6>
+				<h6>
+					(<%= "#{@story.created_at.to_date} at #{@story.created_at.strftime("%I:%M%p")}" %>)
+				</h6>
+			</div>
+		</div>
+		<div class = "col-md-9">
+			<div class="title">
+				<h3 style="color:blue; padding: 0px;">
+					<%= @story.title%>
+				</h3>
+			</div>
+			<div class="body">
+				<p>
+					<%= simple_format(@story.body) %>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h2>Comments</h2>
+
+<%= form_for [@story, Comment.new] do |f| %>
+<%= f.text_area :body, placeholder: "Add a comment" %><br/>
+<%= hidden_field_tag(:type, 'story') %>
+<%= f.submit "Add Comment" %>
+<% end %>
+
+<ul>
+	<%= render(partial: 'comments/comment', collection: @story.comments) %>
+</ul>
