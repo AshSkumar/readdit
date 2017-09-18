@@ -1,6 +1,10 @@
 class LikesController < ApplicationController
 
 	def like
+	 if(!user_signed_in?)
+	    redirect_to new_user_session_path
+	    return
+	  end
 	  @user = current_user
 	  @story = Story.find(params[:story_id])
 	  if @user.liked?(@story)==-1
@@ -20,6 +24,10 @@ class LikesController < ApplicationController
 	end
 
 	def dislike
+	 if(!user_signed_in?)
+	    redirect_to new_user_session_path
+	    return
+	  end
 	  @user = current_user
 	  @story = Story.find(params[:story_id])
 	  if @user.liked?(@story)==1

@@ -1,6 +1,9 @@
 class StoriesController < ApplicationController
 	def new
 		:authenticate_user!
+		if(!user_signed_in?)
+    		redirect_to new_user_session_path
+  		end
 		@story = Story.new
 	end
 

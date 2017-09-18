@@ -12,7 +12,7 @@
 	</div>
 	<%= image_tag @user.avatar.url %>
 
-	<% if current_user.id == @user.id %>
+	<% if user_signed_in? &&  current_user.id == @user.id %>
 	<%=link_to("Edit your profile", edit_user_registration_path)%>
 	<%end%>
 </div>

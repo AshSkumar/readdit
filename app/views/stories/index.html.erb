@@ -7,7 +7,7 @@
 
 		<div align="center">
 
-			<% if @user.liked?(story) == 1 %>
+			<% if user_signed_in? &&@user.liked?(story) == 1 %>
 			<h2 class="liked">
 				<%= link_to fa_icon("thumbs-o-up"), unlike_path(story_id: story.id), method: :delete %>
 			</h2>
@@ -19,7 +19,7 @@
 
 			<h2 class="score"><%= story.likes.size - story.dislikes.size%></h2>
 
-			<% if @user.liked?(story) == -1 %>
+			<% if user_signed_in? && @user.liked?(story) == -1 %>
 			<h2 class = "disliked">
 				<%= link_to fa_icon("thumbs-o-down"), undislike_path(story_id: story.id), method: :delete %>
 			</h2>

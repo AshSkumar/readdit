@@ -6,6 +6,10 @@ before_action :find_commentable
     end
 
     def create
+      if(!user_signed_in?)
+        redirect_to new_user_session_path
+      return
+    end
       @comment = @commentable.comments.new comment_params
       @comment.user_id = current_user.id
       if(params[:type] == 'comment')
